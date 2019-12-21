@@ -21,12 +21,16 @@
 		<div class="score">
 		Счет: 0 
 		</div>
+		<div class="scoreMiss">
+		Промахов: 0 
+		</div>
 	</div>
 	<script type="text/javascript">
 		let vibor = document.querySelector('.vibor'); //див с выбором сложности и кнопкой старта
 		let viborDiff = document.querySelector('.viborDiff'); //поле с выбором сложности
 		let start = document.querySelector('.start'); //кнопка начала игры
 		let scoreShow = document.querySelector('.score'); //вывод счета
+		let scoreMissShow = document.querySelector('.scoreMiss'); //вывод счета
 		let main = document.querySelector('.main'); //див с дырками
 		let holes; //дырки
 		let pic = document.createElement('img'); //крот
@@ -34,10 +38,13 @@
 		let prov = true;
 		let lastRand = 0;
 		let score = 0;
+		let scoreMiss = -1;
 		let rand;
 		let provClick = true;
 		let allHoles;
-
+		let begin = false;
+		let provLose = false;
+		let provScore = 0;
 
 		document.body.appendChild(pic);
 		pic.classList.add('krot');
@@ -66,6 +73,7 @@
 			rand = Math.floor(Math.random() * allHoles.length);
 			if(rand != lastRand){
 				pic.src = 'mole.svg';
+				pic.style.display = 'inline';
 				let top = allHoles[rand].getBoundingClientRect().top;
 				top = top - 135;
 				pic.style.top = top + 'px';
@@ -79,14 +87,17 @@
 		start.onclick = function(){
 			if(viborDiff.value == 1 && prov == true){
 				prov = false;
+				begin = true;
 				create(1500);
 			}else{
 				if(viborDiff.value == 2 && prov == true){
 					prov = false;
+					begin = true;
 					create(1000);
 				}else{
 					if(viborDiff.value == 3 && prov == true){
 						prov = false;
+						begin = true;
 						create(700);
 					}else{
 						alert('Вы не выбрали сложность');
@@ -97,30 +108,48 @@
 
 		//нажатие на крота и прибавление счета, проверка победы
 		pic.onclick = function(){
-			if(score < 9 && provClick == true){
-				score = score + 1;
+			if(scoreMiss < 2 && provClick == true){
+				score++;
 				scoreShow.innerHTML = 'Счет: ' + score;
 				pic.style.display = 'none';
-				show();
-				pic.style.display = 'inline';
 				provClick = false;
-				console.log(score);
 			}
 			else{
-				if(provClick == true){
+				if(scoreMiss > 2 && provLose == false){
 					scoreShow.style.display = 'none';
+					scoreMissShow.style.display = 'none';
 					main.style.display = 'none';
 					pic.style.display = 'none';
 					let win = document.createElement('div');
+					win.style.fontSize = '30px';
+					win.style.textAlign = 'center';
 					document.body.appendChild(win);
-					win.innerHTML = 'Вы победили';
+					win.innerHTML = 'Вы проиграли, ваш счет: ' + score;
 				}
 			}
 		}
 
 		//нажатие не на крота
 		document.onclick = function(){
-			provClick = false;
+			provScore++;
+			if(begin == true && provScore != score){
+				provClick = false;
+				provScore = score;
+				scoreMiss++;
+				scoreMissShow.innerHTML = 'Промахов: ' + scoreMiss;
+			}
+			if(scoreMiss > 2 && provLose == false){
+					scoreShow.style.display = 'none';
+					scoreMissShow.style.display = 'none';
+					main.style.display = 'none';
+					pic.style.display = 'none';
+					let win = document.createElement('div');
+					win.style.fontSize = '30px';
+					win.style.textAlign = 'center';
+					document.body.appendChild(win);
+					win.innerHTML = 'Вы проиграли, ваш счет: ' + score;
+					provLose = true;
+				}
 		}
 	</script>
 </body>
