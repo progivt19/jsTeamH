@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+	<div class="header">
+		<h1>Крот</h1>
+	</div>
+	<div class="vibor">
+		<select name="" class="viborDiff">
+		<option selected="selected">Выберите сложность</option>
+		<option value="1">Легкая</option>
+		<option value="2">Средняя</option>
+		<option value="3">Сложная</option>
+		</select>
+		<button class="start">начать</button>
+	</div>
+	<div class="main">
+		<div class="score">
+		Счет: 0 
+		</div>
+	</div>
+	<script type="text/javascript">
+		let vibor = document.querySelector('.vibor'); //див с выбором сложности и кнопкой старта
+		let viborDiff = document.querySelector('.viborDiff'); //поле с выбором сложности
+		let start = document.querySelector('.start'); //кнопка начала игры
+		let scoreShow = document.querySelector('.score'); //вывод счета
+		let main = document.querySelector('.main'); //див с дырками
+		let holes; //дырки
+		let pic = document.createElement('img'); //крот
+
+		let prov = true;
+		let lastRand = 0;
+		let score = 0;
+		let rand;
+		let provClick = true;
+		let allHoles;
+
+
+		document.body.appendChild(pic);
+		pic.classList.add('krot');
+
+		//создание дырок
+		function create(ms){
+			main.style.display = 'flex';
+			vibor.style.display = 'none';
+			for(let i = 0; i < viborDiff.value; i++){
+				for(let j = 0; j < 6; j++){
+					holes = document.createElement('div');
+					main.appendChild(holes);
+					holes.classList.add('hole');
+					let holesTop = 350 + 300 * i;
+					let holesLeft = 290 + 290 * j;
+					holes.style.top = holesTop + 'px';
+					holes.style.left = holesLeft + 'px';
+				}
+			}
+			allHoles = document.querySelectorAll('.hole');
+			setInterval(show, ms);
+		}
+
+		//перемещиние крота по дыркам
+		function show(){
+			rand = Math.floor(Math.random() * allHoles.length);
+			if(rand != lastRand){
+				pic.src = 'mole.svg';
+				let top = allHoles[rand].getBoundingClientRect().top;
+				top = top - 135;
+				pic.style.top = top + 'px';
+				pic.style.left = allHoles[rand].getBoundingClientRect().left + 'px';
+				provClick = true;
+			}
+			lastRand = rand;
+		}
+
+		//старт и выбор сложности
+		start.onclick = function(){
+			if(viborDiff.value == 1 && prov == true){
+				prov = false;
+				create(1500);
+			}else{
+				if(viborDiff.value == 2 && prov == true){
+					prov = false;
+					create(1000);
+				}else{
+					if(viborDiff.value == 3 && prov == true){
+						prov = false;
+						create(700);
+					}else{
+						alert('Вы не выбрали сложность');
+					}
+				}
+			}
+		}
+
+		//нажатие на крота и прибавление счета, проверка победы
+		pic.onclick = function(){
+			if(score < 9 && provClick == true){
+				score = score + 1;
+				scoreShow.innerHTML = 'Счет: ' + score;
+				pic.style.display = 'none';
+				show();
+				pic.style.display = 'inline';
+				provClick = false;
+				console.log(score);
+			}
+			else{
+				if(provClick == true){
+					scoreShow.style.display = 'none';
+					main.style.display = 'none';
+					pic.style.display = 'none';
+					let win = document.createElement('div');
+					document.body.appendChild(win);
+					win.innerHTML = 'Вы победили';
+				}
+			}
+		}
+
+		//нажатие не на крота
+		document.onclick = function(){
+			provClick = false;
+		}
+	</script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+.main{
+	display: none;
+	flex-flow: row wrap;
+	margin-top: 180px;
+}
+.hole{
+	background-image: url('dirt.svg');
+	background-size: 100% 100%;
+	width: 200px;
+	height: 100px;
+	margin-left: 45px;
+	z-index: 9;
+	position: absolute;
+}
+.krot{
+	position: absolute;
+	width: 150px;
+}
+body{
+	background: orange;
+}
+.score{
+	width: 150px;
+	height: 100px;
+	background: yellow;
+	text-align: center;
+	padding-top: 32px;
+	box-sizing: border-box;
+	border-radius: 20px;
+	font-size: 30px;
+	position: absolute;
+	top: 200px;
+	left: 50px;
+}
+.vibor{
+	
+}
+.header{
+	text-align: center;
+}
