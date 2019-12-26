@@ -21,6 +21,7 @@ let provScore = 0;
 let inter;
 let c = false;
 let lose = false;
+let ms1;
 
 document.body.appendChild(pic);
 pic.classList.add('krot');
@@ -43,6 +44,7 @@ function create(ms, level){
 	}
 	allHoles = document.querySelectorAll('.hole');
 	inter = setInterval(show, ms);
+	ms1 = ms;
 }
 
 //перемещиние крота по дыркам
@@ -92,6 +94,8 @@ pic.onclick = function(){
 		scoreShow.innerHTML = 'Счет: ' + score;
 		pic.style.display = 'none';
 		provClick = false;
+		clearInterval(inter);
+		inter = setInterval(show, ms1);
 	}
 	else{
 		if(scoreMiss > 2 && provLose == false){
